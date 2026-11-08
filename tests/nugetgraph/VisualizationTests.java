@@ -3,7 +3,6 @@ package nugetgraph;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/** Checks graph text, escaping, tree markers and renderer failure behavior. */
 final class VisualizationTests {
     private VisualizationTests() { }
 

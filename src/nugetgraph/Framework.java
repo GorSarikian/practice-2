@@ -2,7 +2,6 @@ package nugetgraph;
 
 import java.util.Locale;
 
-/** Limited, explicit framework compatibility for modern .NET and .NET Standard. */
 public final class Framework {
     private static final int NET_STANDARD_BASE = 1000;
     private static final int NET_CORE_BASE = 2000;
@@ -13,7 +12,6 @@ public final class Framework {
     private static final int CORE_31 = 301;
     private final String target;
 
-    /** Accepts net5.0+ or netstandard2.0/2.1; platform-specific TFMs are not guessed. */
     public Framework(String target) {
         this.target = normalize(target);
         if (this.target.equals("netstandard2.0") || this.target.equals("netstandard2.1")) { return; }
@@ -22,7 +20,6 @@ public final class Framework {
         }
     }
 
-    /** Returns a compatibility score, or -1 for an incompatible dependency group. */
     public int score(String raw) {
         String group = normalize(raw);
         if (group.isEmpty()) { return 0; }

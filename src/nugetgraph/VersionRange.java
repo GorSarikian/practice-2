@@ -1,6 +1,5 @@
 package nugetgraph;
 
-/** NuGet interval or minimum-version constraint; floating nuspec ranges are rejected. */
 public final class VersionRange {
     private static final int INTERVAL_BOUNDS = 2;
     private Version lower;
@@ -9,7 +8,6 @@ public final class VersionRange {
     private boolean includeUpper;
     private final boolean allowPrerelease;
 
-    /** Parses bare minimum, [exact], [min,max), (,max], and unbounded constraints. */
     public VersionRange(String raw) {
         String value = raw.trim();
         allowPrerelease = value.contains("-");
@@ -45,7 +43,6 @@ public final class VersionRange {
         upper = lower;
     }
 
-    /** Whether a concrete version satisfies both bounds and prerelease policy. */
     public boolean contains(Version version) {
         if (version.prerelease() && !allowPrerelease) { return false; }
         return aboveLower(version) && belowUpper(version);

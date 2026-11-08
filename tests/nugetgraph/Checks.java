@@ -1,6 +1,5 @@
 package nugetgraph;
 
-/** Small dependency-free assertion helper; checks remain active without -ea. */
 final class Checks {
     static int count;
     private Checks() { }

@@ -9,13 +9,11 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
 
-/** Emits D2 text and invokes only the D2 renderer to create PNG. */
 public final class D2Exporter {
     private static final long RENDER_TIMEOUT_SECONDS = 90;
     private static final byte[] PNG_SIGNATURE = { (byte) 0x89, 'P', 'N', 'G', 13, 10, 26, 10 };
     private D2Exporter() { }
 
-    /** Produces deterministic D2 identifiers independent of package-name punctuation. */
     public static String text(Graph graph) {
         StringBuilder result = new StringBuilder("direction: right\n\n");
         Map<PackageRef, String> ids = new LinkedHashMap<>();
@@ -35,7 +33,6 @@ public final class D2Exporter {
         return result.toString();
     }
 
-    /** Saves .d2 alongside PNG; a failed render preserves any previous valid PNG. */
     public static Path export(Graph graph, Path output, String executable) throws IOException {
         Path absolute = output.toAbsolutePath();
         Files.createDirectories(absolute.getParent());

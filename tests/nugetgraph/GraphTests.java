@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
 
-/** Exercises cycles, depth cutoffs, filtering and DFS reconvergence. */
 final class GraphTests {
     private GraphTests() { }
 

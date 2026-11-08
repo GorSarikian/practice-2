@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/** ASCII dependency tree with explicit cycle, shared-node and depth markers. */
 public final class AsciiTree {
     private final StringBuilder output = new StringBuilder();
     private final Set<PackageRef> active = new HashSet<>();
@@ -14,7 +13,6 @@ public final class AsciiTree {
 
     private AsciiTree(Graph graph) { this.graph = graph; }
 
-    /** Formats an actual ASCII-only tree; package names may contain Unicode in future repositories. */
     public static String render(Graph graph, int maxDepth) {
         if (graph.nodes().isEmpty()) { return "Root excluded by filter\n"; }
         AsciiTree tree = new AsciiTree(graph);

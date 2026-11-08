@@ -5,14 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-/** NuGet numeric version with optional prerelease identifiers and build metadata. */
 public final class Version implements Comparable<Version> {
     private static final int COMPONENTS = 4;
     private final int[] numbers = new int[COMPONENTS];
     private final List<String> prerelease;
     private final String normalized;
 
-    /** Parses and normalizes 1-4 numeric components and an optional SemVer suffix. */
     public Version(String raw) {
         String value = raw.toLowerCase(Locale.ROOT).split("\\+", 2)[0];
         String[] parts = value.split("-", 2);
@@ -32,14 +30,11 @@ public final class Version implements Comparable<Version> {
         normalized = numeric + (prerelease.isEmpty() ? "" : "-" + String.join(".", prerelease));
     }
 
-    /** Whether this version contains a prerelease suffix. */
     public boolean prerelease() { return !prerelease.isEmpty(); }
 
-    /** Returns NuGet's normalized lowercase version (metadata omitted). */
     @Override
     public String toString() { return normalized; }
 
-    /** Compares numeric components, then SemVer prerelease identifiers. */
     @Override
     public int compareTo(Version other) {
         for (int i = 0; i < COMPONENTS; i++) {

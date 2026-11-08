@@ -10,14 +10,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-/** Reads dependency groups from NuGet XML without third-party package libraries. */
 public final class Nuspec {
-    /** A dependency name and the original version constraint. */
     public record Requirement(String name, String range) { }
 
     private Nuspec() { }
 
-    /** Selects one nearest compatible group, preserving an explicitly empty group. */
     public static List<Requirement> read(String xml, Framework framework) throws IOException {
         Element dependencies = document(xml);
         if (dependencies == null) { return List.of(); }

@@ -1,10 +1,8 @@
 package nugetgraph;
 
-/** Plain adjacency output for the graph-building stage. */
 public final class GraphText {
     private GraphText() { }
 
-    /** Describes every discovered node and marks unexplored depth boundaries. */
     public static String adjacency(Graph graph) {
         if (graph.nodes().isEmpty()) { return "Root excluded by filter\n"; }
         StringBuilder output = new StringBuilder();

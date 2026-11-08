@@ -7,14 +7,12 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.Set;
 
-/** Validated user parameters; relative paths are resolved against the TOML file. */
 public record Config(String packageName, String repository, boolean testMode, Path output,
                      boolean asciiTree, int maxDepth, String filter, Map<String, Object> options) {
     public static final int MAX_DEPTH = 128;
     private static final Set<String> KEYS = Set.of("package", "repository", "test_mode", "output",
             "ascii_tree", "max_depth", "filter", "package_version", "framework", "reverse_package");
 
-    /** Loads and validates required parameters, rejecting unknown keys and type mistakes. */
     public static Config load(Path file) throws IOException {
         Map<String, Object> values = Toml.read(file);
         for (String key : values.keySet()) {
@@ -36,7 +34,6 @@ public record Config(String packageName, String repository, boolean testMode, Pa
         return new Config(name, source, test, output, ascii, depth, filter, Map.copyOf(values));
     }
 
-    /** Returns an optional string parameter, or the documented default. */
     public String option(String key, String fallback) {
         return (String) options.getOrDefault(key, fallback);
     }

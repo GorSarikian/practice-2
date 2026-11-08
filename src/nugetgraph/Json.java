@@ -5,14 +5,21 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Minimal strict JSON reader for NuGet service indexes and version lists. */
 public final class Json {
+    private static final Map<Character, Character> ESCAPES = Map.of(
+            '"', '"',
+            '\\', '\\',
+            '/', '/',
+            'b', '\b',
+            'f', '\f',
+            'n', '\n',
+            'r', '\r',
+            't', '\t');
     private final String text;
     private int position;
 
     private Json(String text) { this.text = text; }
 
-    /** Parses one complete JSON value; trailing data is rejected. */
     public static Object parse(String text) {
         Json reader = new Json(text);
         Object value = reader.value();
@@ -73,18 +80,11 @@ public final class Json {
     }
 
     private char escaped() {
-        return switch (nextCharacter()) {
-            case '"' -> '"';
-            case '\\' -> '\\';
-            case '/' -> '/';
-            case 'b' -> '\b';
-            case 'f' -> '\f';
-            case 'n' -> '\n';
-            case 'r' -> '\r';
-            case 't' -> '\t';
-            case 'u' -> unicode();
-            default -> throw error("invalid escape");
-        };
+        char character = nextCharacter();
+        if (character == 'u') { return unicode(); }
+        Character decoded = ESCAPES.get(character);
+        if (decoded == null) { throw error("invalid escape"); }
+        return decoded;
     }
 
     private char nextCharacter() {

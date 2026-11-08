@@ -6,12 +6,10 @@ import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Reads the flat scalar TOML schema used by this application. */
 public final class Toml {
     private static final int QUOTE_COUNT = 2;
     private Toml() { }
 
-    /** Reads unique bare keys with string, boolean or decimal integer values. */
     public static Map<String, Object> read(Path path) throws IOException {
         Map<String, Object> values = new LinkedHashMap<>();
         int number = 0;

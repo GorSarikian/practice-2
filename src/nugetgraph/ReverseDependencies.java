@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Builds a reversed repository view and reuses the recursive DFS from stage 3. */
 public final class ReverseDependencies {
     private ReverseDependencies() { }
 
-    /** Searches all test-repository nodes, or the analyzed forward graph for remote NuGet. */
     public static Graph find(Repository repository, PackageRef root, Config config) throws IOException {
         Graph source = sourceGraph(repository, root, config);
         String name = config.option("reverse_package", config.packageName());

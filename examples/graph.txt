@@ -1,4 +1,3 @@
-# Diamond, cycle and a disconnected component.
 A: B C
 B: D
 C: D E

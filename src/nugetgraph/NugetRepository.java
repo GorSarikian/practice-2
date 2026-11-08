@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/** NuGet V3 service discovery, version selection and direct nuspec dependency reads. */
 public final class NugetRepository implements Repository {
     private final HttpText http;
     private final URI base;
@@ -17,10 +16,8 @@ public final class NugetRepository implements Repository {
     private final Map<String, List<Version>> versions = new HashMap<>();
     private final Map<PackageRef, List<PackageRef>> dependencies = new HashMap<>();
 
-    /** Uses JDK HTTP; no NuGet client or package manager is invoked. */
     public NugetRepository(Config config) throws IOException { this(config, HttpText.standard()); }
 
-    /** Allows an in-memory transport for deterministic API and error tests. */
     public NugetRepository(Config config, HttpText http) throws IOException {
         this.http = http;
         framework = new Framework(config.option("framework", "net8.0"));
@@ -28,7 +25,6 @@ public final class NugetRepository implements Repository {
         base = discover(URI.create(config.repository()));
     }
 
-    /** Uses latest stable for 'latest', otherwise the lowest satisfying dependency version. */
     @Override
     public PackageRef resolve(String name, String range) throws IOException {
         String id = name.toLowerCase(Locale.ROOT);
@@ -43,7 +39,6 @@ public final class NugetRepository implements Repository {
         return new PackageRef(id, chosen.toString());
     }
 
-    /** Resolves direct dependencies of the nearest compatible framework group, with caching. */
     @Override
     public List<PackageRef> dependencies(PackageRef node) throws IOException {
         if (dependencies.containsKey(node)) { return dependencies.get(node); }

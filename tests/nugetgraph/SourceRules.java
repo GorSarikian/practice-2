@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.tools.ToolProvider;
 
-/** Enforces the assignment's source limits using the JDK Java syntax tree. */
 final class SourceRules {
     private static final int MAX_FILE_LINES = 1000;
     private static final int MAX_LINE_LENGTH = 120;
@@ -112,7 +111,7 @@ final class SourceRules {
 
         @Override
         public Void visitCase(CaseTree node, Void unused) {
-            if (!node.getExpressions().isEmpty()) { value += node.getExpressions().size(); }
+            value += Math.max(1, node.getExpressions().size());
             return super.visitCase(node, unused);
         }
 

@@ -2,12 +2,10 @@ package nugetgraph;
 
 import java.nio.file.Path;
 
-/** Command-line entry point and stage demonstrations. */
 public final class Main {
     private static final int STAGE_ARGUMENTS = 2;
     private Main() { }
 
-    /** Runs a stage; failures use stderr and a nonzero process exit status. */
     public static void main(String[] args) {
         try { execute(args); }
         catch (Exception exception) {

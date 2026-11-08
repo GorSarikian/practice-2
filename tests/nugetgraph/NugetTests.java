@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-/** Offline NuGet protocol, XML selection, version, JSON and failure tests. */
 final class NugetTests {
     private NugetTests() { }
 
@@ -13,8 +12,17 @@ final class NugetTests {
         versions();
         xml();
         protocol();
+        jsonEscapes();
         Checks.equal("А", ((Map<?, ?>) Json.parse("{\"x\":\"\\u0410\"}")).get("x"));
         for (String invalid : List.of("{}junk", "{\"x\":1,}", "[1,]", "\"a\n\"", "01", "{\"x\":0,\"x\":1}")) {
+            Checks.fails(() -> Json.parse(invalid));
+        }
+    }
+
+    private static void jsonEscapes() throws Exception {
+        Checks.equal("\"\\/\b\f\n\r\t", Json.parse("\"\\\"\\\\\\/\\b\\f\\n\\r\\t\""));
+        Checks.equal("A", Json.parse("\"\\u0041\""));
+        for (String invalid : List.of("\"\\x\"", "\"\\", "\"\\u12\"", "\"\\uXXXX\"")) {
             Checks.fails(() -> Json.parse(invalid));
         }
     }

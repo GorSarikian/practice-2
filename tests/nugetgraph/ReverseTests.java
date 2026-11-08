@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/** Checks reverse traversal across cycles, depth limits and disconnected components. */
 final class ReverseTests {
     private ReverseTests() { }
 

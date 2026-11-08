@@ -4,7 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-/** Checks every required parameter and TOML lexical edge cases. */
 final class ConfigTests {
     private ConfigTests() { }
 
