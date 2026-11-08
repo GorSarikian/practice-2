@@ -36,14 +36,10 @@ public final class NugetRepository implements Repository {
         List<Version> available = versions(id);
         boolean latest = range.equals("latest");
         VersionRange constraint = new VersionRange(latest ? "" : range);
-        Version chosen = null;
-        for (Version candidate : available) {
-            if (constraint.contains(candidate)) {
-                if (chosen == null || (latest && candidate.compareTo(chosen) > 0)
-                        || (!latest && candidate.compareTo(chosen) < 0)) { chosen = candidate; }
-            }
-        }
-        if (chosen == null) { throw new IOException("No version of " + name + " satisfies " + range); }
+        var order = latest ? java.util.Comparator.<Version>reverseOrder()
+                : java.util.Comparator.<Version>naturalOrder();
+        Version chosen = available.stream().filter(constraint::contains).min(order)
+                .orElseThrow(() -> new IOException("No version of " + name + " satisfies " + range));
         return new PackageRef(id, chosen.toString());
     }
 

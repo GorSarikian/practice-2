@@ -10,6 +10,8 @@ public final class AllTests {
         NugetTests.run();
         GraphTests.run();
         ReverseTests.run();
+        VisualizationTests.run();
+        SourceRules.run();
         System.out.println("PASS: " + Checks.count + " assertions");
     }
 }

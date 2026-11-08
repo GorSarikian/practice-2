@@ -10,6 +10,7 @@ public final class Framework {
     private static final int MODERN_NET_MIN = 500;
     private static final int STANDARD_20 = 200;
     private static final int STANDARD_21 = 201;
+    private static final int CORE_31 = 301;
     private final String target;
 
     /** Accepts net5.0+ or netstandard2.0/2.1; platform-specific TFMs are not guessed. */
@@ -30,10 +31,14 @@ public final class Framework {
             return level(group) <= maximum ? NET_STANDARD_BASE + level(group) : -1;
         }
         if (target.startsWith("netstandard")) { return -1; }
+        return modernScore(group);
+    }
+
+    private int modernScore(String group) {
         if (group.matches("net[0-9]+\\.[0-9]+") && level(group) >= MODERN_NET_MIN) {
             return level(group) <= level(target) ? NET_BASE + level(group) : -1;
         }
-        if (group.matches("netcoreapp[0-9]+\\.[0-9]+") && level(group) <= 301) {
+        if (group.matches("netcoreapp[0-9]+\\.[0-9]+") && level(group) <= CORE_31) {
             return NET_CORE_BASE + level(group);
         }
         return -1;

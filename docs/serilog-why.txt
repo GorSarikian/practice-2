@@ -1,0 +1,7 @@
+Проект 'Compare' имеет следующие графы зависимостей для 'Microsoft.Extensions.Logging.Abstractions':
+
+  [net8.0]
+   │
+   └─ Serilog.Extensions.Logging (v8.0.0)
+      └─ Microsoft.Extensions.Logging (v8.0.0)
+         └─ Microsoft.Extensions.Logging.Abstractions (v8.0.0)

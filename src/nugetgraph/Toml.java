@@ -8,6 +8,7 @@ import java.util.Map;
 
 /** Reads the flat scalar TOML schema used by this application. */
 public final class Toml {
+    private static final int QUOTE_COUNT = 2;
     private Toml() { }
 
     /** Reads unique bare keys with string, boolean or decimal integer values. */
@@ -36,11 +37,13 @@ public final class Toml {
             if (escaped) { escaped = false; continue; }
             if (quote == '"' && current == '\\') { escaped = true; continue; }
             if (current == quote) { quote = 0; continue; }
-            if (quote == 0 && (current == '"' || current == '\'')) { quote = current; continue; }
+            if (quote == 0 && isQuote(current)) { quote = current; continue; }
             if (quote == 0 && current == '#') { return raw.substring(0, i); }
         }
         return raw;
     }
+
+    private static boolean isQuote(char character) { return character == '"' || character == '\''; }
 
     private static Object scalar(String value, int line) {
         if (value.startsWith("\"")) { return basicString(value, line); }
@@ -54,11 +57,11 @@ public final class Toml {
     }
 
     private static String basicString(String value, int line) {
-        if (value.length() < 2 || !value.endsWith("\"")) { throw error(line, "unclosed string"); }
+        if (value.length() < QUOTE_COUNT || !value.endsWith("\"")) { throw error(line, "unclosed string"); }
         StringBuilder result = new StringBuilder();
         for (int i = 1; i < value.length() - 1; i++) {
             char current = value.charAt(i);
-            if (current == '"' || current < ' ') { throw error(line, "invalid string character"); }
+            validateCharacter(current, line);
             if (current != '\\') { result.append(current); continue; }
             i++;
             if (i >= value.length() - 1) { throw error(line, "unfinished escape"); }
@@ -70,6 +73,10 @@ public final class Toml {
             } else { result.append(escape(escape, line)); }
         }
         return result.toString();
+    }
+
+    private static void validateCharacter(char character, int line) {
+        if (character == '"' || character < ' ') { throw error(line, "invalid string character"); }
     }
 
     private static char escape(char character, int line) {
@@ -89,7 +96,8 @@ public final class Toml {
             String hex = value.substring(start, start + count);
             if (!hex.matches("[0-9a-fA-F]+")) { throw error(line, "invalid Unicode escape"); }
             int code = Integer.parseInt(hex, 16);
-            if (!Character.isValidCodePoint(code) || (code >= 0xD800 && code <= 0xDFFF)) {
+            if (!Character.isValidCodePoint(code)
+                    || (code >= Character.MIN_SURROGATE && code <= Character.MAX_SURROGATE)) {
                 throw error(line, "invalid Unicode scalar");
             }
             return code;

@@ -1,0 +1,11 @@
+Проект 'Compare' имеет следующие графы зависимостей для 'Microsoft.Extensions.DependencyInjection.Abstractions':
+
+  [net8.0]
+   │
+   └─ Microsoft.Extensions.Logging (v8.0.0)
+      ├─ Microsoft.Extensions.DependencyInjection (v8.0.0)
+      │  └─ Microsoft.Extensions.DependencyInjection.Abstractions (v8.0.0)
+      ├─ Microsoft.Extensions.Logging.Abstractions (v8.0.0)
+      │  └─ Microsoft.Extensions.DependencyInjection.Abstractions (v8.0.0)
+      └─ Microsoft.Extensions.Options (v8.0.0)
+         └─ Microsoft.Extensions.DependencyInjection.Abstractions (v8.0.0)

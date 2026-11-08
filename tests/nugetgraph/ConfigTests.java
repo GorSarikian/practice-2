@@ -14,7 +14,8 @@ final class ConfigTests {
         Checks.equal(true, valid.testMode());
         Checks.equal(5, valid.maxDepth());
         String source = Files.readString(Path.of("examples/test.toml"));
-        for (String key : List.of("package", "repository", "test_mode", "output", "ascii_tree", "max_depth", "filter")) {
+        var required = List.of("package", "repository", "test_mode", "output", "ascii_tree", "max_depth", "filter");
+        for (String key : required) {
             invalid(source.replaceFirst("(?m)^" + key + " = .*", key + " = 1.5"));
             invalid(source.replaceFirst("(?m)^" + key + " = .*\\R?", ""));
         }

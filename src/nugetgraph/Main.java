@@ -4,6 +4,7 @@ import java.nio.file.Path;
 
 /** Command-line entry point and stage demonstrations. */
 public final class Main {
+    private static final int STAGE_ARGUMENTS = 2;
     private Main() { }
 
     /** Runs a stage; failures use stderr and a nonzero process exit status. */
@@ -16,8 +17,10 @@ public final class Main {
     }
 
     private static void execute(String[] args) throws Exception {
-        if (args.length != 2 || !java.util.Set.of("stage1", "stage2", "stage3", "stage4").contains(args[0])) {
-            throw new IllegalArgumentException("Usage: run.bat stage1|stage2|stage3|stage4 <config.toml>");
+        if (args.length == 1) { args = new String[] { "stage5", args[0] }; }
+        if (args.length != STAGE_ARGUMENTS || !java.util.Set.of("stage1", "stage2", "stage3", "stage4", "stage5")
+                .contains(args[0])) {
+            throw new IllegalArgumentException("Usage: run.bat [stage1|stage2|stage3|stage4|stage5] <config.toml>");
         }
         Config config = Config.load(Path.of(args[1]));
         if (args[0].equals("stage1")) { printConfig(config); return; }
@@ -30,13 +33,20 @@ public final class Main {
             System.out.print(GraphText.adjacency(reversed));
             return;
         }
-        if (args[0].equals("stage3")) {
-            Graph graph = new GraphBuilder(repository, config.maxDepth(), config.filter()).build(root);
-            System.out.print(GraphText.adjacency(graph));
-            return;
-        }
+        if (!args[0].equals("stage2")) { graphStage(args[0], repository, root, config); return; }
         System.out.println(root.label());
         for (PackageRef dependency : repository.dependencies(root)) { System.out.println(dependency.label()); }
+    }
+
+    private static void graphStage(String stage, Repository repository, PackageRef root, Config config)
+            throws Exception {
+        Graph graph = new GraphBuilder(repository, config.maxDepth(), config.filter()).build(root);
+        if (stage.equals("stage3")) { System.out.print(GraphText.adjacency(graph)); return; }
+        if (config.asciiTree()) { System.out.print(AsciiTree.render(graph, config.maxDepth())); }
+        String executable = System.getenv().getOrDefault("D2_COMMAND", "d2");
+        Path source = D2Exporter.export(graph, config.output(), executable);
+        System.out.println("D2: " + source);
+        System.out.println("PNG: " + config.output());
     }
 
     private static PackageRef root(Repository repository, Config config) throws java.io.IOException {
@@ -54,8 +64,8 @@ public final class Main {
         System.out.println("ascii_tree=" + config.asciiTree());
         System.out.println("max_depth=" + config.maxDepth());
         System.out.println("filter=" + config.filter());
-        config.options().keySet().stream().sorted().filter(key ->
-                SetHolder.OPTIONAL.contains(key)).forEach(key -> System.out.println(key + "=" + config.options().get(key)));
+        config.options().keySet().stream().sorted().filter(SetHolder.OPTIONAL::contains)
+                .forEach(key -> System.out.println(key + "=" + config.options().get(key)));
     }
 
     private static final class SetHolder {

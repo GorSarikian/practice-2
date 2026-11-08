@@ -1,0 +1,5 @@
+Проект 'Compare' имеет следующие графы зависимостей для 'Newtonsoft.Json':
+
+  [net8.0]
+   │
+   └─ Newtonsoft.Json (v13.0.3)

@@ -73,8 +73,7 @@ public final class Json {
     }
 
     private char escaped() {
-        if (position >= text.length()) { throw error("missing escape"); }
-        return switch (text.charAt(position++)) {
+        return switch (nextCharacter()) {
             case '"' -> '"';
             case '\\' -> '\\';
             case '/' -> '/';
@@ -86,6 +85,11 @@ public final class Json {
             case 'u' -> unicode();
             default -> throw error("invalid escape");
         };
+    }
+
+    private char nextCharacter() {
+        if (position >= text.length()) { throw error("missing escape"); }
+        return text.charAt(position++);
     }
 
     private char unicode() {

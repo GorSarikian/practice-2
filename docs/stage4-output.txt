@@ -1,0 +1,7 @@
+Reverse edges: dependency -> dependent
+E: C, F
+C: A
+F:
+A: D
+D: B, C
+B: A

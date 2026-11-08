@@ -11,6 +11,7 @@ import java.util.Map;
 
 /** Local uppercase graph format: A: B C, one declared node per line. */
 public final class TestRepository implements Repository {
+    private static final int DECLARATION_FIELDS = 2;
     private final Map<PackageRef, List<PackageRef>> graph = new LinkedHashMap<>();
 
     /** Reads the entire finite repository and validates all referenced vertices. */
@@ -21,7 +22,9 @@ public final class TestRepository implements Repository {
             String line = raw.split("#", 2)[0].trim();
             if (line.isEmpty()) { continue; }
             String[] parts = line.split(":", -1);
-            if (parts.length != 2) { throw new IOException("Graph line " + number + ": expected A: B C"); }
+            if (parts.length != DECLARATION_FIELDS) {
+                throw new IOException("Graph line " + number + ": expected A: B C");
+            }
             PackageRef node = node(parts[0].trim());
             List<PackageRef> children = new ArrayList<>();
             if (!parts[1].isBlank()) {
@@ -31,6 +34,10 @@ public final class TestRepository implements Repository {
                 throw new IOException("Duplicate graph node: " + node.name());
             }
         }
+        validateReferences();
+    }
+
+    private void validateReferences() throws IOException {
         if (graph.isEmpty()) { throw new IOException("Test repository is empty"); }
         for (List<PackageRef> children : graph.values()) {
             for (PackageRef child : children) {

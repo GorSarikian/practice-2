@@ -1,0 +1,13 @@
+Проект "Compare" содержит следующие ссылки на пакеты
+   [net8.0]:
+   Пакет верхнего уровня             Запрошено   Разрешено
+   > Serilog.Extensions.Logging      [8.0.0]     8.0.0
+
+   Транзитивный пакет                                           Разрешено
+   > Microsoft.Extensions.DependencyInjection                   8.0.0
+   > Microsoft.Extensions.DependencyInjection.Abstractions      8.0.0
+   > Microsoft.Extensions.Logging                               8.0.0
+   > Microsoft.Extensions.Logging.Abstractions                  8.0.0
+   > Microsoft.Extensions.Options                               8.0.0
+   > Microsoft.Extensions.Primitives                            8.0.0
+   > Serilog                                                    3.1.1

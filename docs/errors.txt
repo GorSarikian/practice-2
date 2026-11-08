@@ -1,0 +1,20 @@
+package: exit=1
+Error: Invalid package name: a
+
+repository: exit=1
+Error: repository must be a readable file: PROJECT\examples\missing.txt
+
+test_mode: exit=1
+Error: test_mode is required and must be Boolean
+
+output: exit=1
+Error: output must be a nonempty PNG file path
+
+ascii_tree: exit=1
+Error: ascii_tree is required and must be Boolean
+
+max_depth: exit=1
+Error: max_depth must be in 0..128
+
+filter: exit=1
+Error: filter is required and must be String

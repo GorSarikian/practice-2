@@ -85,6 +85,11 @@ public record Config(String packageName, String repository, boolean testMode, Pa
         }
         Path path = parent.resolve(value).normalize();
         if (Files.isDirectory(path)) { throw new IllegalArgumentException("output points to a directory"); }
+        ensureWritable(path);
+        return path;
+    }
+
+    private static void ensureWritable(Path path) {
         Path ancestor = path.getParent();
         while (ancestor != null && !Files.exists(ancestor)) { ancestor = ancestor.getParent(); }
         if (ancestor == null || !Files.isDirectory(ancestor) || !Files.isWritable(ancestor)) {
@@ -93,6 +98,5 @@ public record Config(String packageName, String repository, boolean testMode, Pa
         if (Files.exists(path) && !Files.isWritable(path)) {
             throw new IllegalArgumentException("output file must be writable");
         }
-        return path;
     }
 }

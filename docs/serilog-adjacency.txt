@@ -1,0 +1,8 @@
+serilog.extensions.logging@8.0.0: microsoft.extensions.logging@8.0.0, serilog@3.1.1
+microsoft.extensions.logging@8.0.0: microsoft.extensions.dependencyinjection@8.0.0, microsoft.extensions.logging.abstractions@8.0.0, microsoft.extensions.options@8.0.0
+microsoft.extensions.dependencyinjection@8.0.0: microsoft.extensions.dependencyinjection.abstractions@8.0.0
+microsoft.extensions.dependencyinjection.abstractions@8.0.0:
+microsoft.extensions.logging.abstractions@8.0.0: microsoft.extensions.dependencyinjection.abstractions@8.0.0
+microsoft.extensions.options@8.0.0: microsoft.extensions.dependencyinjection.abstractions@8.0.0, microsoft.extensions.primitives@8.0.0
+microsoft.extensions.primitives@8.0.0:
+serilog@3.1.1:
