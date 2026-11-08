@@ -1,0 +1,14 @@
+build/
+generated/
+*.class
+*.jar
+*.zip
+*.tar.gz
+*.png
+*.svg
+*.log
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
