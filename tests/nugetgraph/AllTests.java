@@ -9,6 +9,7 @@ public final class AllTests {
         ConfigTests.run();
         NugetTests.run();
         GraphTests.run();
+        ReverseTests.run();
         System.out.println("PASS: " + Checks.count + " assertions");
     }
 }

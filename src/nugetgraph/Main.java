@@ -16,14 +16,20 @@ public final class Main {
     }
 
     private static void execute(String[] args) throws Exception {
-        if (args.length != 2 || !java.util.Set.of("stage1", "stage2", "stage3").contains(args[0])) {
-            throw new IllegalArgumentException("Usage: run.bat stage1|stage2|stage3 <config.toml>");
+        if (args.length != 2 || !java.util.Set.of("stage1", "stage2", "stage3", "stage4").contains(args[0])) {
+            throw new IllegalArgumentException("Usage: run.bat stage1|stage2|stage3|stage4 <config.toml>");
         }
         Config config = Config.load(Path.of(args[1]));
         if (args[0].equals("stage1")) { printConfig(config); return; }
         Repository repository = config.testMode() ? new TestRepository(Path.of(config.repository()))
                 : new NugetRepository(config);
         PackageRef root = root(repository, config);
+        if (args[0].equals("stage4")) {
+            Graph reversed = ReverseDependencies.find(repository, root, config);
+            System.out.println("Reverse edges: dependency -> dependent");
+            System.out.print(GraphText.adjacency(reversed));
+            return;
+        }
         if (args[0].equals("stage3")) {
             Graph graph = new GraphBuilder(repository, config.maxDepth(), config.filter()).build(root);
             System.out.print(GraphText.adjacency(graph));

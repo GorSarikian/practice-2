@@ -1,0 +1,8 @@
+package = "A"
+repository = "graph.txt"
+test_mode = true
+output = "../generated/reverse.png"
+ascii_tree = true
+max_depth = 8
+filter = ""
+reverse_package = "E"
