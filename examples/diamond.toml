@@ -1,0 +1,7 @@
+package = "A"
+repository = "diamond.txt"
+test_mode = true
+output = "../generated/diamond.png"
+ascii_tree = true
+max_depth = 2
+filter = ""

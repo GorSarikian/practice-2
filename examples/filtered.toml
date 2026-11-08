@@ -1,0 +1,7 @@
+package = "A"
+repository = "graph.txt"
+test_mode = true
+output = "../generated/filtered.png"
+ascii_tree = true
+max_depth = 8
+filter = "D"

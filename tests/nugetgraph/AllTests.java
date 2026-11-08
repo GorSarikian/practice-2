@@ -8,6 +8,7 @@ public final class AllTests {
     public static void main(String[] args) throws Exception {
         ConfigTests.run();
         NugetTests.run();
+        GraphTests.run();
         System.out.println("PASS: " + Checks.count + " assertions");
     }
 }

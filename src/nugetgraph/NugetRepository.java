@@ -13,6 +13,7 @@ public final class NugetRepository implements Repository {
     private final HttpText http;
     private final URI base;
     private final Framework framework;
+    private final String filter;
     private final Map<String, List<Version>> versions = new HashMap<>();
     private final Map<PackageRef, List<PackageRef>> dependencies = new HashMap<>();
 
@@ -23,6 +24,7 @@ public final class NugetRepository implements Repository {
     public NugetRepository(Config config, HttpText http) throws IOException {
         this.http = http;
         framework = new Framework(config.option("framework", "net8.0"));
+        filter = config.filter().toLowerCase(Locale.ROOT);
         base = discover(URI.create(config.repository()));
     }
 
@@ -52,6 +54,7 @@ public final class NugetRepository implements Repository {
         URI uri = base.resolve(node.name() + "/" + node.version() + "/" + node.name() + ".nuspec");
         List<PackageRef> result = new ArrayList<>();
         for (Nuspec.Requirement requirement : Nuspec.read(http.get(uri), framework)) {
+            if (!filter.isEmpty() && requirement.name().toLowerCase(Locale.ROOT).contains(filter)) { continue; }
             result.add(resolve(requirement.name(), requirement.range()));
         }
         List<PackageRef> immutable = List.copyOf(result);
