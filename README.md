@@ -36,3 +36,40 @@ $env:JAVA_HOME = 'C:\path\to\jdk-17'
 
 Дубликаты, неизвестные ключи, неверные типы и отсутствующие обязательные значения запрещены.
 См. `examples/test.toml`; проверки конфигурации находятся в `tests/nugetgraph/ConfigTests.java`.
+
+## Этап 2: NuGet
+
+`run.bat stage2 examples/logging.toml` печатает прямые зависимости выбранной версии.
+Приложение само читает NuGet V3 service index, находит PackageBaseAddress/3.0.0,
+получает список версий и XML `.nuspec` через `java.net.http`. JSON, диапазоны версий
+и выбор группы зависимостей реализованы самостоятельно; XML разбирается JDK DOM с запретом DTD.
+NuGet/dotnet и сторонние библиотеки для извлечения зависимостей не вызываются.
+
+Дополнительные TOML-параметры:
+
+| Ключ | По умолчанию | Назначение |
+|---|---|---|
+| package_version | "latest" | Точная версия корня; latest выбирает наибольшую стабильную |
+| framework | "net8.0" | net5.0+ либо netstandard2.0/2.1 |
+| reverse_package | имя корня | Цель поиска обратных зависимостей на этапе 4 |
+
+Для каждой зависимости выбирается минимальная доступная версия, удовлетворяющая диапазону.
+Поддерживаются bare minimum, [exact], открытые/закрытые и неограниченные интервалы.
+Prerelease допускается, когда он явно указан в диапазоне; latest выбирает stable.
+Floating ranges в nuspec запрещены форматом NuGet и отклоняются.
+Идентификаторы NuGet нечувствительны к регистру, в графе приводятся к lowercase.
+
+Для modern .NET выбирается ближайшая совместимая группа net, затем netcoreapp<=3.1,
+затем netstandard<=2.1, затем группа без платформы. Для netstandard выбирается
+совместимая группа netstandard. Пустая выбранная группа означает отсутствие зависимостей.
+Старый .NET Framework и платформенные TFM не поддерживаются; отсутствие совместимой
+группы даёт явную ошибку. Полный NuGet restore с глобальным разрешением конфликтов не реализуется.
+
+Сетевые ошибки, HTTP-статусы, некорректные метаданные и отсутствующие версии дают код 1.
+Метаданные кешируются на время запуска. Сетевые тайм-ауты: соединение 15 с, запрос 30 с.
+
+Официальные спецификации:
+[NuGet API](https://learn.microsoft.com/en-us/nuget/api/package-base-address-resource),
+[nuspec](https://learn.microsoft.com/en-us/nuget/reference/nuspec),
+[диапазоны версий](https://learn.microsoft.com/en-us/nuget/concepts/package-versioning),
+[разрешение зависимостей](https://learn.microsoft.com/en-us/nuget/concepts/dependency-resolution).

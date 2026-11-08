@@ -7,6 +7,7 @@ public final class AllTests {
     /** Runs all registered test suites and reports the assertion count. */
     public static void main(String[] args) throws Exception {
         ConfigTests.run();
+        NugetTests.run();
         System.out.println("PASS: " + Checks.count + " assertions");
     }
 }

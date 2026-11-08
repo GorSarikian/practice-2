@@ -1,0 +1,9 @@
+package = "Newtonsoft.Json"
+repository = "https://api.nuget.org/v3/index.json"
+test_mode = false
+output = "../generated/newtonsoft.png"
+ascii_tree = true
+max_depth = 8
+filter = ""
+package_version = "13.0.3"
+framework = "net8.0"

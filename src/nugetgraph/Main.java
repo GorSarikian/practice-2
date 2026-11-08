@@ -16,11 +16,22 @@ public final class Main {
     }
 
     private static void execute(String[] args) throws Exception {
-        if (args.length != 2 || !args[0].equals("stage1")) {
-            throw new IllegalArgumentException("Usage: run.bat stage1 <config.toml>");
+        if (args.length != 2 || !java.util.Set.of("stage1", "stage2").contains(args[0])) {
+            throw new IllegalArgumentException("Usage: run.bat stage1|stage2 <config.toml>");
         }
         Config config = Config.load(Path.of(args[1]));
-        printConfig(config);
+        if (args[0].equals("stage1")) { printConfig(config); return; }
+        if (config.testMode()) { throw new IllegalArgumentException("Test repository is introduced at stage3"); }
+        Repository repository = new NugetRepository(config);
+        PackageRef root = root(repository, config);
+        System.out.println(root.label());
+        for (PackageRef dependency : repository.dependencies(root)) { System.out.println(dependency.label()); }
+    }
+
+    private static PackageRef root(Repository repository, Config config) throws java.io.IOException {
+        String version = config.option("package_version", "latest");
+        String range = version.equals("latest") ? version : "[" + new Version(version) + "]";
+        return repository.resolve(config.packageName(), range);
     }
 
     private static void printConfig(Config config) {
